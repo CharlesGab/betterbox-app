@@ -1,0 +1,142 @@
+.register_window{
+  border: 2px solid #ccc;
+  padding: 35px;
+  backgroundColor: #f9f9f9;
+  width: 300px;
+  margin: 30px auto;
+  borderRadius: 8px;
+  boxShadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.username_part {
+   display: flex; 
+   alignItems: center; 
+   marginBottom: 15px;
+}
+
+.username_part_label {
+  marginRight: 10px; 
+  minWidth: 80px;
+}
+
+.username_part_input {
+  padding: 10px; 
+  margin-top: -10px; 
+  margin-left: 10px;
+  margin-bottom: 30px;
+  flex: 1;
+}
+
+.button_part {
+  .buttons_part {
+  display: flex; 
+  justify-content: space-around;
+  gap: 20px; /* Increase gap between buttons */
+  margin-top: 10px; /* Moves buttons down */
+  }
+}
+
+.buttons_part_cancel {
+  padding: 8px 16px; 
+  margin-top: 20px;
+  margin-left: 60px; /* Moves Cancel left (adjust value) */
+}
+.buttons_part_register {
+  padding: 8px 16px; 
+  background-color: #4CAF50; 
+  color: white; 
+  border: none; 
+  border-radius: 4px;
+  margin-left: 20px; /* Moves Register right (adjust value) */
+}
+
+.password_part {
+  display: flex; 
+  alignItems: center; 
+  marginBottom: 15px;
+}
+
+.password_part_label {
+  marginRight: 10px; 
+  minWidth: 80px;
+}
+
+.password_part_input {
+  padding: 8px; 
+  margin-top: -10px; 
+  margin-left: 14px;
+  flex: 1;
+}
+
+.search_input {
+  margin-left : 600px;
+}
+
+.filter_button {
+  margin-left: 20px;
+  padding: 8px 16px;
+  background-color: transparent;
+  text-decoration: solid;
+  color: black;
+  border: none;
+}
+.filter_button:hover {
+  font-weight: bold;
+  color: blue;
+  cursor: pointer;
+}
+
+.filter_section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.movies_selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    left: 0;
+    width: 100%; 
+    width: 260px;
+    height: 350px;
+    border-radius: 20px;
+    margin-right: 40px;
+    border: 1px solid gray;
+    font-family: Arial, sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.movie_details_box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.exit_button {
+  position: absolute;
+  top: 10px;
+  right: 100px;
+  margin-right: 20px;
+  flex-wrap: wrap;
+  right: 0;
+  background-color: #16e932; 
+  color: white; 
+  border: none; 
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.exit_button_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
