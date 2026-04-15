@@ -97,7 +97,7 @@ function App() {
               <button
               className={styles.buttons_part_cancel}
               onClick={() => {setShowIsRegistering(false)
-                              display_details();
+                              display_details(false);
               }}
               
               >
@@ -120,9 +120,9 @@ function App() {
   const filterFunction = () => {
     const currentFilter = saved_filter.current.value;
   }
-  const display_details = () => {
-   
-      setShowDetails({show: true});
+  const display_details = (bool) => {
+
+      setShowDetails({show: bool});
 
   }
   return (
@@ -162,7 +162,7 @@ function App() {
             <h3>{movie.title}</h3>
             <button 
             onClick={() => {
-              display_details();       
+              display_details(true);       
               setMovieDetails(movie);
             }}
           >
