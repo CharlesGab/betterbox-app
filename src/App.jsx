@@ -1,9 +1,10 @@
 import { useMemo, useEffect, useState } from 'react'
 import { useRef } from 'react'
-import useFetch from './fetchapi.jsx'
+import  {useFetch, useGenreFetch} from './fetchapi.jsx'
+import useMovieSearch from './show_by_search.jsx'
 import viewMovieDetails from './movie_details.jsx'
 import styles from './App.module.css'
-
+import Draggable from 'react-draggable';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,18 +17,35 @@ function App() {
   const [reg_Password, setRegPassword] = useState("")
   const [loggedInUser, setLoggedInUser] = useState(null); // holds who is current logged in user
   const [searchQuery, setSearchQuery] = useState("");
+  const [genre_id, setGenreId] = useState(null);
   const saved_filter = useRef(null);
   const [show_details, setShowDetails] = useState({show: false});
   const [movie_details, setMovieDetails] = useState(null);
+  const [savedRestaurants, setSavedRestaurants] = useState({});
 
- 
-    const {data_, loading} = useFetch(page, criteria);
+
+    const {data_: browseData, loading: browseLoading} = useFetch(page, criteria);
+    const {data_: searchData, loading: searchLoading} = useMovieSearch(searchQuery);
+    const {data_: genreData, loading: genreLoading} = useGenreFetch(page, criteria, genre_id);
+    // searchQuery is falsy when the input is "" (empty) we use browseData, 
+    // otherwise it is truthy when the input has some value then we use searchData
+   
+    let data_ = searchQuery ? searchData : browseData;
+    //when is genreid is present then we use genreData instead of the other two, otherwise we use the searchData or browseData depending on the searchQuery
+    if (genre_id) { 
+      data_ = genreData;
+    }
+    let loading = searchQuery ? searchLoading : browseLoading;
+    if (genre_id) {
+      loading = genreLoading;
+    }
+
     const display_list = useMemo(() => {
+      console.log("genre id is " + genre_id);
+      console.log("criteria is " + criteria);
       return data_?.results || [];
     }, [data_]);
     const totalPages = data_?.total_pages || 0;
-    
- 
 
   useEffect(() => { 
     const storedLoggedInUser = localStorage.getItem('loggedInUser');
@@ -117,43 +135,117 @@ function App() {
     );
   };
 
-  const filterFunction = () => {
-    const currentFilter = saved_filter.current.value;
+  const filterFunction = (criteria) => {
+    console.log("filtering by " + criteria);
+    setCriteria(criteria);
   }
   const display_details = (bool) => {
 
       setShowDetails({show: bool});
 
   }
+  //=========================================================================
+  //Draggable floating window
+  function profile_window() {
+  const nodeRef = useRef(null);
+
+  return (
+    <Draggable nodeRef={nodeRef} handle=".handle">
+      <div ref={nodeRef}>
+        <div className="handle">
+        
+        <div className={styles.profile_window}>
+          Drag me Kalel
+        </div>
+
+         </div>
+      </div>
+    </Draggable>
+  );
+}
+//=========================================================================
+const handleMenuAction = (e) => {
+  const choice = e.target.value;
+
+  if (choice === "profile") {
+    console.log("Opening Profile...");
+  } else if (choice === "watchlists") {
+    console.log("Opening Watchlists...");
+  }
+};
+//========================================================================
+
   return (
    <div>
     <div>
-      <form>
-        <h1>Login</h1>
-        {loggedInUser ? 
-        (<div> 
-          <p>Welcome, {loggedInUser}!</p> 
-          <button onClick={() => {
-            localStorage.removeItem('loggedInUser');
-            setLoggedInUser(null);
-          }}>
-            Logout
-          </button>
-        </div>)
+      <div>
+        {!loggedInUser && (<h1>Login</h1>)}
+
+        {loggedInUser ? (
+          <div>
+        
+            <select className={styles.profile} value={loggedInUser} onChange={handleMenuAction}>
+              {/* Changed <options> to <option> */}
+              <option value={loggedInUser}>{loggedInUser}!</option>
+              <option value="profile"> Profile</option>
+              <option value="watchlists"> Watchlists</option>
+            </select>
+        
+            <p>Welcome, {loggedInUser}</p> 
+            
+            <button onClick={() => {
+              localStorage.removeItem('loggedInUser');
+              setLoggedInUser(null);
+            }}>
+              Logout
+            </button>
+          </div>)
         : (
           <div>
             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
             <input type="password" placeholder="Password" value={passwordValue} onChange={(e) => setPasswordValue(e.target.value)} />
              <button type="button" onClick={loginHandler}>Login</button>
               <button type="button" onClick={() => setShowIsRegistering(true)}>Register</button>
-              <input className={styles.search_input} type="text" placeholder="Search movies.." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
           </div>
         )}
-        <div className={styles.filter_section}>
-          <button className={styles.filter_button} ref={saved_filter} value="popularity.desc" onChange={() => filterFunction()}> Popularity </button>
-          <button className={styles.filter_button} ref={saved_filter} value="release_date.desc" onChange={() => filterFunction()}> Release Date </button>
+        <div>
+          <input className={styles.search_input} type="text" placeholder="Search movies.." value={searchQuery} 
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }} />
+         </div>
         </div>
-      </form>
+        
+        <div className={styles.filter_section}>
+          <button className={styles.filter_button} ref={saved_filter} value="popularity.desc" onClick={(e) => {filterFunction(e.target.value); setGenreId(null)}}> Popularity </button> 
+          <select className={styles.filter_button} ref={saved_filter} value="Sort by"onChange={(e) => {filterFunction(e.target.value); setGenreId(null)}}>
+            <option value="Sort by"> Sort by</option>
+            <option value="release_date.desc">Newest</option>
+            <option value="release_date.asc">Oldest</option>
+          </select>
+
+        </div>
+        <div>
+          <select className={styles.filter_genre} value="Genre" onChange={(e) => {
+            setGenreId(e.target.value);
+          }}>
+              <option value="Genre">Genre</option>
+              <option value="28"> Action </option>
+              <option value="35"> Comedy </option>
+              <option value="18"> Drama </option>
+              <option value="27"> Horror </option>
+              <option value="10749"> Romance </option>
+              <option value="878"> Science Fiction </option>
+          </select>
+          <select className={styles.filter_genre} value="Ratings" onChange={(e) => {
+            filterFunction(e.target.value);
+            }}>
+            <option value="Ratings">Ratings</option>
+             <option value="vote_average.asc">Lowest Rating</option>
+             <option value="vote_average.desc">Highest Rating</option>
+          </select>
+        </div>
+     
       {loggedInUser && <p>Current user: {loggedInUser}</p>}
     </div>
     <div className={styles.movies_selection}>
@@ -177,8 +269,10 @@ function App() {
     <div>
         {showIsRegistering && renderBoxWindow()}
     </div>
-     
-     
+    <div>
+
+    </div>
+     {profile_window()}  
    </div>
   )
 }
