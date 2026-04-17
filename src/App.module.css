@@ -4,25 +4,23 @@
   background: #f9f9f9;
   width: 300px;
   margin: 30px auto;
-  borderRadius: 8px;
-  boxShadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .username_part {
    display: flex; 
-   alignItems: center; 
-   marginBottom: 15px;
+   align-items: center; 
+   margin-bottom: 15px;
 }
 
 .username_part_label {
-  marginRight: 10px; 
-  minWidth: 80px;
+  min-width: 80px;
+  padding-bottom: 30px;
 }
 
 .username_part_input {
   padding: 10px; 
-  margin-top: -10px; 
-  margin-left: 10px;
   margin-bottom: 30px;
   flex: 1;
 }
@@ -52,19 +50,16 @@
 
 .password_part {
   display: flex; 
-  alignItems: center; 
-  marginBottom: 15px;
+  align-items: center; 
+  margin-bottom: 15px;
 }
 
 .password_part_label {
-  marginRight: 10px; 
-  minWidth: 80px;
+  min-width: 80px;
 }
 
 .password_part_input {
   padding: 8px; 
-  margin-top: -10px; 
-  margin-left: 14px;
   flex: 1;
 }
 
@@ -161,18 +156,39 @@
   background-color: #e8f0ff;
 }
 
-.profile_window {
-  border: 2px solid #ccc;
-  padding: 35px;
-  background: #cccccc;
-  width: 300px;
-  margin: 30px auto;
-  cursor: move; /* Changes cursor to a four-pointed arrow */
-  cursor: grab; /* Changes cursor to an open hand */
-  
+/*========================Future Use================ */
+.modal_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000; 
 }
+/*==================================================== */
+
+.register_window{
+  z-index: 1001;
+  background: white;
+  position: fixed;
+  top: 20%;
+  left: 40%;
+}
+
+ .profile_window {
+  z-index: 1001;
+  background: rgb(119, 119, 119);
+  position: fixed;
+  width: 900px;
+  height: 1000px;
+  margin-top: 200px;
+  left: 25%;
+  border-radius: 40px;
+
+ }
 .profile_window:active {
-  cursor: grabbing; /* Changes cursor to a closed hand when clicking */
+  cursor: grabbing; 
 }
 
 .profile {
@@ -182,6 +198,7 @@
   text-decoration: solid;
   color: black;
   border: none;
+  
 }
 .profile:hover {
   font-weight: bold;
@@ -192,4 +209,27 @@
 .profile:focus {
   border-color: blue;
   background-color: #e8f0ff;
+}
+
+.profile_box_selection {
+  display: flex;
+  background-color: #e8f0ff;
+  margin-top: 100px;
+  height: 40px;
+  width: 80%;
+  margin-left: 89px;
+}
+
+.profile_name {
+  display: flex;
+  position: fixed;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #ccc;
+  margin-top: 25px;
+  margin-left: 100px;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold ;
+  font-family:'Courier New', Courier, monospace
 }

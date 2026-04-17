@@ -22,6 +22,7 @@ function App() {
   const [show_details, setShowDetails] = useState({show: false});
   const [movie_details, setMovieDetails] = useState(null);
   const [savedRestaurants, setSavedRestaurants] = useState({});
+  const [show_profile, setShowProfile] = useState(false);
 
 
     const {data_: browseData, loading: browseLoading} = useFetch(page, criteria);
@@ -89,7 +90,8 @@ function App() {
     };
   const renderBoxWindow = () => {
     return (
-      <div className={styles.register_window}>
+      <div className={styles['modal_overlay']}>
+        <div className={styles.register_window}>
         <h5>Register</h5>
         <div>
           <div className={styles.username_part}>
@@ -132,6 +134,8 @@ function App() {
           </div>
         </div>
       </div>
+      </div>
+      
     );
   };
 
@@ -144,32 +148,50 @@ function App() {
       setShowDetails({show: bool});
 
   }
+
+  const handleprofile = () => {
+      setShowProfile(false);
+  }
   //=========================================================================
   //Draggable floating window
-  function profile_window() {
+  const ProfileWindow = ({onClose}) =>{
   const nodeRef = useRef(null);
 
   return (
+
+    <div className={styles['modal_overlay']}>
     <Draggable nodeRef={nodeRef} handle=".handle">
       <div ref={nodeRef}>
         <div className="handle">
-        
-        <div className={styles.profile_window}>
-          Drag me Kalel
+        <div>
+          <div className={styles.profile_window}>
+            <div className={styles.profile_name}>
+              {loggedInUser} 
+            </div>
+
+            <button className={styles.exit_button} onClick={handleprofile}> X</button>
+          <div className={styles.profile_box_selection}>
+            <button className={styles.filter_button}>Profile</button>
+            <button className={styles.filter_button}>Watchlist</button>
+            
+          </div>
         </div>
+        </div>
+        
 
          </div>
       </div>
     </Draggable>
+    </div>
   );
-}
+};
 //=========================================================================
 const handleMenuAction = (e) => {
   const choice = e.target.value;
 
   if (choice === "profile") {
-    console.log("Opening Profile...");
-  } else if (choice === "watchlists") {
+    setShowProfile(true);
+  } else if (choice === "home") {
     console.log("Opening Watchlists...");
   }
 };
@@ -184,11 +206,13 @@ const handleMenuAction = (e) => {
         {loggedInUser ? (
           <div>
         
-            <select className={styles.profile} value={loggedInUser} onChange={handleMenuAction}>
-              {/* Changed <options> to <option> */}
+            <select className={styles.profile} value={loggedInUser} onChange={(e) => {handleMenuAction(e)
+              
+            }}>
               <option value={loggedInUser}>{loggedInUser}!</option>
+              <option value="home"> Home</option>
               <option value="profile"> Profile</option>
-              <option value="watchlists"> Watchlists</option>
+              
             </select>
         
             <p>Welcome, {loggedInUser}</p> 
@@ -272,7 +296,7 @@ const handleMenuAction = (e) => {
     <div>
 
     </div>
-     {profile_window()}  
+     {show_profile && <ProfileWindow onChange={(e) => setShowProfile(false)}/>}  
    </div>
   )
 }
